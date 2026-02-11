@@ -16,8 +16,9 @@ export class WalkService {
     return of(walks.map((w) => ({ ...w }))).pipe(delay(300));
   }
 
-  create(walk: Omit<Walk, 'id'>): Observable<Walk> {
-    const newWalk: Walk = { ...walk, id: crypto.randomUUID() };
+  create(walk: Omit<Walk, 'id' | 'createdAt'>): Observable<Walk> {
+    const newWalk: Walk = { ...walk, id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(), };
     this.walks.push(newWalk);
     return of({ ...newWalk }).pipe(delay(300));
   }

@@ -16,8 +16,9 @@ export class DogService {
     return of(dogs.map((d) => ({ ...d }))).pipe(delay(300));
   }
 
-  create(dog: Omit<Dog, 'id'>): Observable<Dog> {
-    const newDog: Dog = { ...dog, id: crypto.randomUUID() };
+  create(dog: Omit<Dog, 'id' | 'createdAt'>): Observable<Dog> {
+    const newDog: Dog = { ...dog, id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(), };
     this.dogs.push(newDog);
     return of({ ...newDog }).pipe(delay(300));
   }
