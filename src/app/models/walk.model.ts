@@ -1,4 +1,4 @@
-export type WalkStatus = 'scheduled' | 'in_progress' | 'completed' | 'canceled';
+export type WalkStatus = 'scheduled' | 'in-progress' | 'completed' | 'cancelled';
 
 export interface Walk {
     id: string;
