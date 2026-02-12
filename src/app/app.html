@@ -1,5 +1,6 @@
 <div class="min-h-screen bg-gray-50">
-    <!-- Navbar -->
+    <!-- Navbar (only when authenticated) -->
+    @if (isAuthenticated()) {
     <nav class="bg-white shadow-sm border-b border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
@@ -41,6 +42,15 @@
               class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 transition">
               Walks
             </a>
+
+            <div class="flex items-center space-x-3 ml-4 pl-4 border-l border-gray-200">
+              <span class="text-sm text-gray-600">{{ user()?.name }}</span>
+              <button
+                (click)="logout()"
+                class="px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md transition">
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -69,13 +79,22 @@
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition">
               Walks
             </a>
+            <div class="border-t border-gray-200 mt-2 pt-2 px-3">
+              <span class="block text-sm text-gray-600 mb-2">{{ user()?.name }}</span>
+              <button
+                (click)="logout(); mobileMenuOpen.set(false)"
+                class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 transition">
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       }
     </nav>
+    }
 
     <!-- Page content -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main [class]="isAuthenticated() ? 'max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8' : ''">
       <router-outlet />
     </main>
   </div>
