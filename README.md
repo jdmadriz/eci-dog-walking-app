@@ -20,6 +20,4 @@ npm start
 
 ## Login Credentials
 
-| Email | Password |
-admin@walkmydog.com | admin123 |
 user@walkmydog.com | user123 |

@@ -2,12 +2,6 @@
   "users": [
     {
       "id": "1",
-      "email": "admin@walkmydog.com",
-      "password": "admin123",
-      "name": "Admin User"
-    },
-    {
-      "id": "2",
       "email": "user@walkmydog.com",
       "password": "user123",
       "name": "Joe Smith"
@@ -31,15 +25,6 @@
       "phone": "555-0102",
       "address": "456 Pine Ave",
       "createdAt": "2025-02-20T10:00:00Z"
-    },
-    {
-      "firstName": "test",
-      "lastName": "test",
-      "email": "jdmadriz@gmail.com",
-      "phone": "334-3343",
-      "address": "test",
-      "createdAt": "2026-02-12T01:08:26.968Z",
-      "id": "2df13d0f-d7b8-4055-9480-afad6d739797"
     }
   ],
   "dogs": [
@@ -101,6 +86,15 @@
       "notes": "take a walk",
       "createdAt": "Feb 11, 2026",
       "id": "35fd6adf-7e25-46fe-9c2c-d7a8bfc935ac"
+    },
+    {
+      "dogId": "2",
+      "date": "2026-02-13T18:08:00.000Z",
+      "duration": 30,
+      "status": "scheduled",
+      "notes": "",
+      "createdAt": "2026-02-12T03:05:20.977Z",
+      "id": "430278ad-78be-4f98-b391-318d108714e0"
     }
   ]
 }
