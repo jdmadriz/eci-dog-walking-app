@@ -13,13 +13,14 @@ import {
 import { DogActions } from '../../../../state/dogs/dog.actions';
 import { selectDogEntities } from '../../../../state/dogs/dog.selectors';
 import { WalkStatus } from '../../../../models/walk.model';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-walk-list',
   standalone: true,
   imports: [RouterLink, DatePipe, FormsModule],
   template: `
-    <div class="max-w-5xl mx-auto space-y-6 mt-8">
+    <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <h1 class="text-2xl font-bold text-gray-900">Walks</h1>
@@ -63,87 +64,64 @@ import { WalkStatus } from '../../../../models/walk.model';
         </div>
       }
 
-      <!-- Table -->
+      <!-- Table + Mobile Cards -->
       @if (!loading() && filteredWalks().length > 0) {
-        <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
-          <table class="min-w-full divide-y divide-gray-200">
+        <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+          <!-- Desktop table -->
+          <table class="min-w-full divide-y divide-gray-200 hidden md:table">
             <thead class="bg-gray-50">
               <tr>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Dog
-                </th>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Date
-                </th>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Duration
-                </th>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Status
-                </th>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Notes
-                </th>
-                <th
-                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Actions
-                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dog</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               @for (walk of paginatedWalks(); track walk.id) {
                 <tr class="hover:bg-gray-50 transition">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {{ getDogName(walk.dogId) }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ walk.date | date: 'medium' }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ walk.duration }} min
-                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ getDogName(walk.dogId) }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ walk.date | date:'medium' }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ walk.duration }} min</td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <span [class]="getStatusClasses(walk.status)">
-                      {{ walk.status }}
-                    </span>
+                    <span [class]="getStatusClasses(walk.status)">{{ walk.status }}</span>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                    {{ walk.notes || '—' }}
-                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ walk.notes || '—' }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
-                    <a
-                      [routerLink]="['/walks', walk.id, 'edit']"
-                      class="text-indigo-600 hover:text-indigo-700 font-medium"
-                    >
-                      Edit
-                    </a>
-                    <button
-                      (click)="onDelete(walk.id)"
-                      class="text-red-600 hover:text-red-700 font-medium"
-                    >
-                      Delete
-                    </button>
+                    <a [routerLink]="['/walks', walk.id, 'edit']" class="text-indigo-600 hover:text-indigo-700 font-medium">Edit</a>
+                    <button (click)="onDelete(walk.id)" class="text-red-600 hover:text-red-700 font-medium">Delete</button>
                   </td>
                 </tr>
               }
             </tbody>
           </table>
 
+          <!-- Mobile cards -->
+          <div class="md:hidden divide-y divide-gray-200">
+            @for (walk of paginatedWalks(); track walk.id) {
+              <div class="p-4 space-y-2">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">{{ getDogName(walk.dogId) }}</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ walk.date | date:'medium' }} · {{ walk.duration }} min</p>
+                  </div>
+                  <div class="flex space-x-3">
+                    <a [routerLink]="['/walks', walk.id, 'edit']" class="text-xs text-indigo-600 font-medium">Edit</a>
+                    <button (click)="onDelete(walk.id)" class="text-xs text-red-600 font-medium">Delete</button>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span [class]="getStatusClasses(walk.status)">{{ walk.status }}</span>
+                  <span class="text-xs text-gray-400">{{ walk.notes || '—' }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
           <!-- Pagination -->
-          <div
-            class="bg-gray-50 px-6 py-3 flex items-center justify-between border-t border-gray-200"
-          >
+          <div class="bg-gray-50 px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between border-t border-gray-200 gap-2">
             <div class="text-sm text-gray-500">
               Showing {{ startIndex() + 1 }}–{{ endIndex() }} of {{ filteredWalks().length }} walks
             </div>
@@ -157,12 +135,9 @@ import { WalkStatus } from '../../../../models/walk.model';
               @for (page of pages(); track page) {
                 <button
                   (click)="currentPage.set(page)"
-                  [class]="
-                    page === currentPage()
-                      ? 'px-3 py-1 text-sm border border-indigo-600 bg-indigo-600 text-white rounded-md'
-                      : 'px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition'
-                  "
-                >
+                  [class]="page === currentPage()
+                    ? 'px-3 py-1 text-sm border border-indigo-600 bg-indigo-600 text-white rounded-md'
+                    : 'px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition'">
                   {{ page }}
                 </button>
               }
@@ -199,6 +174,7 @@ import { WalkStatus } from '../../../../models/walk.model';
 })
 export class WalkListComponent implements OnInit {
   private store = inject(Store<AppState>);
+  private toast = inject(ToastService);
 
   walks = this.store.selectSignal(selectAllWalks);
   loading = this.store.selectSignal(selectWalksLoading);
@@ -274,8 +250,9 @@ export class WalkListComponent implements OnInit {
   }
 
   onDelete(id: string): void {
-    if (confirm('Are you sure you want to delete this walk?')) {
+    this.toast.confirm('Are you sure you want to delete this walk?', () => {
       this.store.dispatch(WalkActions.deleteWalk({ id }));
-    }
+      this.toast.show('Walk deleted successfully', 'success');
+    });
   }
 }

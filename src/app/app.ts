@@ -10,4 +10,5 @@ import { ToastComponent } from './shared/components/toast/toast';
 })
 export class App {
   protected readonly title = signal('dog-walking-app');
+  mobileMenuOpen = signal(false);
 }

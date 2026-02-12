@@ -18,7 +18,7 @@ import { ToastService } from '../../../../shared/components/toast/toast.service'
   standalone: true,
   imports: [RouterLink, FormsModule],
   template: `
-    <div class="max-w-5xl mx-auto space-y-6 mt-8">
+    <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <h1 class="text-2xl font-bold text-gray-900">Dogs</h1>
@@ -54,93 +54,64 @@ import { ToastService } from '../../../../shared/components/toast/toast.service'
         </div>
       }
 
-      <!-- Table -->
+      <!-- Table + Mobile Cards -->
       @if (!loading() && filteredDogs().length > 0) {
-        <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
-          <table class="min-w-full divide-y divide-gray-200">
+        <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+          <!-- Desktop table -->
+          <table class="min-w-full divide-y divide-gray-200 hidden md:table">
             <thead class="bg-gray-50">
               <tr>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Name
-                </th>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Breed
-                </th>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Age
-                </th>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Weight
-                </th>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Owner
-                </th>
-                <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Notes
-                </th>
-                <th
-                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Actions
-                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Breed</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Owner</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               @for (dog of paginatedDogs(); track dog.id) {
                 <tr class="hover:bg-gray-50 transition">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {{ dog.name }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ dog.breed }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ dog.age }} yrs
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ dog.weight }} lbs
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ getOwnerName(dog.clientId) }}
-                  </td>
-                  <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                    {{ dog.notes || '—' }}
-                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ dog.name }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ dog.breed }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ dog.age }} yrs</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ dog.weight }} lbs</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ getOwnerName(dog.clientId) }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ dog.notes || '—' }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
-                    <a
-                      [routerLink]="['/dogs', dog.id, 'edit']"
-                      class="text-indigo-600 hover:text-indigo-700 font-medium"
-                    >
-                      Edit
-                    </a>
-                    <button
-                      (click)="onDelete(dog.id)"
-                      class="text-red-600 hover:text-red-700 font-medium"
-                    >
-                      Delete
-                    </button>
+                    <a [routerLink]="['/dogs', dog.id, 'edit']" class="text-indigo-600 hover:text-indigo-700 font-medium">Edit</a>
+                    <button (click)="onDelete(dog.id)" class="text-red-600 hover:text-red-700 font-medium">Delete</button>
                   </td>
                 </tr>
               }
             </tbody>
           </table>
 
+          <!-- Mobile cards -->
+          <div class="md:hidden divide-y divide-gray-200">
+            @for (dog of paginatedDogs(); track dog.id) {
+              <div class="p-4 space-y-2">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">{{ dog.name }}</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ dog.breed }} · {{ dog.age }} yrs · {{ dog.weight }} lbs</p>
+                  </div>
+                  <div class="flex space-x-3">
+                    <a [routerLink]="['/dogs', dog.id, 'edit']" class="text-xs text-indigo-600 font-medium">Edit</a>
+                    <button (click)="onDelete(dog.id)" class="text-xs text-red-600 font-medium">Delete</button>
+                  </div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-400">
+                  <span>Owner: {{ getOwnerName(dog.clientId) }}</span>
+                  <span>{{ dog.notes || '—' }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
           <!-- Pagination -->
-          <div
-            class="bg-gray-50 px-6 py-3 flex items-center justify-between border-t border-gray-200"
-          >
+          <div class="bg-gray-50 px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between border-t border-gray-200 gap-2">
             <div class="text-sm text-gray-500">
               Showing {{ startIndex() + 1 }}–{{ endIndex() }} of {{ filteredDogs().length }} dogs
             </div>
@@ -148,29 +119,22 @@ import { ToastService } from '../../../../shared/components/toast/toast.service'
               <button
                 (click)="currentPage.set(currentPage() - 1)"
                 [disabled]="currentPage() === 1"
-                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition disabled:opacity-50
-  disabled:cursor-not-allowed"
-              >
+                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed">
                 Previous
               </button>
               @for (page of pages(); track page) {
                 <button
                   (click)="currentPage.set(page)"
-                  [class]="
-                    page === currentPage()
-                      ? 'px-3 py-1 text-sm border border-indigo-600 bg-indigo-600 text-white rounded-md'
-                      : 'px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition'
-                  "
-                >
+                  [class]="page === currentPage()
+                    ? 'px-3 py-1 text-sm border border-indigo-600 bg-indigo-600 text-white rounded-md'
+                    : 'px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition'">
                   {{ page }}
                 </button>
               }
               <button
                 (click)="currentPage.set(currentPage() + 1)"
                 [disabled]="currentPage() === totalPages()"
-                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition disabled:opacity-50
-  disabled:cursor-not-allowed"
-              >
+                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed">
                 Next
               </button>
             </div>
@@ -253,9 +217,9 @@ export class DogListComponent implements OnInit {
   }
 
   onDelete(id: string): void {
-    if (confirm('Are you sure you want to delete this dog?')) {
+    this.toast.confirm('Are you sure you want to delete this dog?', () => {
       this.store.dispatch(DogActions.deleteDog({ id }));
       this.toast.show('Dog deleted successfully', 'success');
-    }
+    });
   }
 }
