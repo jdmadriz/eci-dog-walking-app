@@ -1,0 +1,106 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@walkmydog.com",
+      "password": "admin123",
+      "name": "Admin User"
+    },
+    {
+      "id": "2",
+      "email": "user@walkmydog.com",
+      "password": "user123",
+      "name": "Joe Smith"
+    }
+  ],
+  "clients": [
+    {
+      "id": "1",
+      "firstName": "Karen",
+      "lastName": "Johnson",
+      "email": "karen@email.com",
+      "phone": "555-0101",
+      "address": "123 Oak St",
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "firstName": "James",
+      "lastName": "Wilson",
+      "email": "james@email.com",
+      "phone": "555-0102",
+      "address": "456 Pine Ave",
+      "createdAt": "2025-02-20T10:00:00Z"
+    },
+    {
+      "firstName": "test",
+      "lastName": "test",
+      "email": "jdmadriz@gmail.com",
+      "phone": "334-3343",
+      "address": "test",
+      "createdAt": "2026-02-12T01:08:26.968Z",
+      "id": "2df13d0f-d7b8-4055-9480-afad6d739797"
+    }
+  ],
+  "dogs": [
+    {
+      "id": "1",
+      "clientId": "1",
+      "name": "Buddy",
+      "breed": "Golden Retriever",
+      "age": 3,
+      "weight": 65,
+      "notes": "Very friendly",
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "clientId": "1",
+      "name": "Luna",
+      "breed": "Labrador",
+      "age": 5,
+      "weight": 55,
+      "notes": "Needs slow walks",
+      "createdAt": "2025-01-17T10:00:00Z"
+    },
+    {
+      "id": "3",
+      "clientId": "2",
+      "name": "Max",
+      "breed": "German Shepherd",
+      "age": 2,
+      "weight": 75,
+      "notes": "High energy",
+      "createdAt": "2025-01-18T10:00:00Z"
+    }
+  ],
+  "walks": [
+    {
+      "id": "1",
+      "dogId": "1",
+      "date": "2025-06-10T09:00:00Z",
+      "duration": 30,
+      "status": "completed",
+      "notes": "Great walk",
+      "createdAt": "2025-06-10T09:00:00Z"
+    },
+    {
+      "id": "2",
+      "dogId": "3",
+      "date": "2025-06-11T20:00:00.000Z",
+      "duration": 45,
+      "status": "completed",
+      "notes": "",
+      "createdAt": "Jun 11, 2025"
+    },
+    {
+      "dogId": "1",
+      "date": "2026-02-12T09:17:00.000Z",
+      "duration": 30,
+      "status": "completed",
+      "notes": "take a walk",
+      "createdAt": "Feb 11, 2026",
+      "id": "35fd6adf-7e25-46fe-9c2c-d7a8bfc935ac"
+    }
+  ]
+}

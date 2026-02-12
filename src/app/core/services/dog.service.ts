@@ -1,39 +1,34 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, delay, throwError } from 'rxjs';
-import { Dog } from '../../models/dog.model';
-import { MOCK_DOGS } from './mock-data';
+import { Injectable, inject } from '@angular/core';
+  import { HttpClient } from '@angular/common/http';
+  import { Observable } from 'rxjs';
+  import { Dog } from '../../models/dog.model';
 
-@Injectable({ providedIn: 'root' })
-export class DogService {
-  private dogs: Dog[] = [...MOCK_DOGS];
+  @Injectable({ providedIn: 'root' })
+  export class DogService {
+    private http = inject(HttpClient);
+    private apiUrl = 'http://localhost:3000/dogs';
 
-  getAll(): Observable<Dog[]> {
-    return of([...this.dogs]).pipe(delay(300));
+    getAll(): Observable<Dog[]> {
+      return this.http.get<Dog[]>(this.apiUrl);
+    }
+
+    getByClientId(clientId: string): Observable<Dog[]> {
+      return this.http.get<Dog[]>(`${this.apiUrl}?clientId=${clientId}`);
+    }
+
+    create(dog: Omit<Dog, 'id' | 'createdAt'>): Observable<Dog> {
+      return this.http.post<Dog>(this.apiUrl, {
+        ...dog,
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    update(dog: Partial<Dog> & { id: string }): Observable<Dog> {
+      return this.http.patch<Dog>(`${this.apiUrl}/${dog.id}`, dog);
+    }
+
+    delete(id: string): Observable<void> {
+      return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
   }
-
-  getByClientId(clientId: string): Observable<Dog[]> {
-    const dogs = this.dogs.filter((d) => d.clientId === clientId);
-    return of(dogs.map((d) => ({ ...d }))).pipe(delay(300));
-  }
-
-  create(dog: Omit<Dog, 'id' | 'createdAt'>): Observable<Dog> {
-    const newDog: Dog = { ...dog, id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(), };
-    this.dogs.push(newDog);
-    return of({ ...newDog }).pipe(delay(300));
-  }
-
-  update(dog: Dog): Observable<Dog> {
-    const index = this.dogs.findIndex((d) => d.id === dog.id);
-    if (index === -1) return throwError(() => new Error('Dog not found'));
-    this.dogs[index] = { ...dog };
-    return of({ ...dog }).pipe(delay(300));
-  }
-
-  delete(id: string): Observable<string> {
-    const index = this.dogs.findIndex((d) => d.id === id);
-    if (index === -1) return throwError(() => new Error('Dog not found'));
-    this.dogs.splice(index, 1);
-    return of(id).pipe(delay(300));
-  }
-}
