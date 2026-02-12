@@ -11,6 +11,7 @@ import {
 } from '../../../../state/dogs/dog.selectors';
 import { ClientActions } from '../../../../state/clients/client.actions';
 import { selectClientEntities } from '../../../../state/clients/client.selectors';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-dog-list',
@@ -200,6 +201,8 @@ import { selectClientEntities } from '../../../../state/clients/client.selectors
 
 export class DogListComponent implements OnInit {
   private store = inject(Store<AppState>);
+  private toast = inject(ToastService);
+  
 
   dogs = this.store.selectSignal(selectAllDogs);
   loading = this.store.selectSignal(selectDogsLoading);
@@ -252,6 +255,7 @@ export class DogListComponent implements OnInit {
   onDelete(id: string): void {
     if (confirm('Are you sure you want to delete this dog?')) {
       this.store.dispatch(DogActions.deleteDog({ id }));
+      this.toast.show('Dog deleted successfully', 'success');
     }
   }
 }
