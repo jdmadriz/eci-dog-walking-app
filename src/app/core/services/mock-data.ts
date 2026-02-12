@@ -32,7 +32,7 @@ export const MOCK_DOGS: Dog[] = [
     age: 3,
     weight: 65,
     notes: 'Very friendly',
-    createdAt: '2025-01-165T10:00:00Z',
+    createdAt: '2025-01-16T10:00:00Z',
   },
   {
     id: '2',
