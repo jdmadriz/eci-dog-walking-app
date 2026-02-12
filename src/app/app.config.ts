@@ -13,11 +13,16 @@ import { clientReducer } from './state/clients/client.reducer';
 import { ClientEffects } from './state/clients/client.effect';
 import { DogEffects } from './state/dogs/dog.effects';
 import { WalkEffects } from './state/walks/walk.effects';
+import { provideHttpClient } from '@angular/common/http';
+
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    provideHttpClient(),
     provideStore({
       clients: clientReducer,
       dogs: dogReducer,
