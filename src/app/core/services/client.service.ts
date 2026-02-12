@@ -30,8 +30,8 @@ export class ClientService {
   update(client: Client): Observable<Client> {
     const index = this.clients.findIndex((c) => c.id === client.id);
     if (index === -1) return throwError(() => new Error('Client not found'));
-    this.clients[index] = { ...client };
-    return of({ ...client }).pipe(delay(300));
+    this.clients[index] = { ...this.clients[index], ...client };
+    return of({ ...this.clients[index] }).pipe(delay(300));
   }
 
   delete(id: string): Observable<string> {
